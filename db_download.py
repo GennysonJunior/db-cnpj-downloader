@@ -390,35 +390,38 @@ class CNPJ:
 if __name__ == "__main__":
     cnpj = CNPJ()
     for arg in argv[1:len(argv)]:
-        if arg[0] == "-" or arg[0] == "/":
-            for a in arg[1:len(arg)]:
-                match a:
-                    case "b":
-                        cnpj.genDbRaw()
-                    case "d":
-                        cnpj.downloader()
-                    case "u":
-                        cnpj.updateConfg()
-                    case "r":
-                        cnpj.remove()
-                    case "n":
-                        cnpj.genNewDb()
-                    case "?":
-                        print("""\n
+        if arg[0] == "-":
+            match arg:
+                case "-b" | "--raw-data-base":
+                    cnpj.genDbRaw()
+                case "-d" | "--download":
+                    cnpj.downloader()
+                case "-u" | "--update":
+                    cnpj.updateConfg()
+                case "-r" | "--remove":
+                    cnpj.remove()
+                case "-n" | "--new-data-base":
+                    cnpj.genNewDb()
+                case "-?" | "--help":
+                    print("""\n
 USE:
     py db_download.py <COMMANDS>
+
 COMMAND:
-    start       comando para fazer o download dos arquivos e a criação do banco sqlite.
-    remove      comando para apagar todos os arquivos da pasta \"download\" e atualizar o arquivo confg_download.json.
-    -d          comando para fazer o download dos arquivos do site do governo.
-    -b          comando para fazer o banco sqlite caso os arquivos já estejam todos baixados.
-    -u          comando para atualizar o arquivo confg_download.json, caso tenha mais arquivos no site do governo (Atenção: este comando reseta todo o arquivo confg_download.json, perdendo todo o estado do download anterior; Recomendação: executar este comando sempre que possivel).
-    -r          comando para apagar todos os arquivos da pasta \"download\".
-    -n          comando para gerar um novo banco de dados sqlite com tabelas mais simples.
-    -?          comando de ajuda.
+    start...................Comando para fazer o download dos arquivos e a criação do banco sqlite.
+    remove..................Comando para apagar todos os arquivos da pasta \"download\" e atualizar o arquivo confg_download.json.
+    
+    -d    --download........Comando para fazer o download dos arquivos do site do governo.
+    -b    --raw-data-base...Comando para fazer o banco sqlite caso os arquivos já estejam todos baixados.
+    -u    --update..........Comando para atualizar o arquivo confg_download.json, caso tenha mais arquivos no site do
+                            governo (Atenção: este comando reseta todo o arquivo confg_download.json, perdendo todo o
+                            estado do download anterior; Recomendação: executar este comando sempre que possivel).
+    -r    --remove..........Comando para apagar todos os arquivos da pasta \"download\".
+    -n    --new-data-base...Comando para gerar um novo banco de dados sqlite com tabelas mais simples.
+    -?    --help............Comando de ajuda.
                         \n""")
-                    case _:
-                        raise Exception(f"Erro: comando (-{a}) não existe, deigite: \"py db_download.py -?\"")
+                case _:
+                    raise Exception(f"Erro: comando ({a}) não existe, deigite: \"py db_download.py -?\"")
         elif arg == "start":
             cnpj.downloader()
             cnpj.genDbRaw()
