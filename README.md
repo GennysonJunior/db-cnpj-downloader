@@ -1,5 +1,5 @@
 # db-cnpj-downloader
-Programa em python que baixa uma base de dados (publicas) de CNPJ's do governo e transforma em 2 arquivo SQLITE, um arquivo intermediário (data_raw.db) com a mesma configuração de tabelas do governo, outro arquivo (data.db) com 4 tabelas (Simples, Socios, Empresas, Estabelecimentos).
+Programa em python que baixa uma base de dados (publicos) de CNPJ's do governo e transforma em 2 arquivo SQLITE, um arquivo intermediário `data_raw.db` com a mesma configuração de tabelas do governo, outro arquivo `data.db` com 4 tabelas (Empresas, Simples, Socios e Estabelecimentos).
 ---
 
 # Como instalar
@@ -23,4 +23,4 @@ py db_download.py start
 ```bash
 py db_download.py -?
 ```
-> O programa cria duas pasta, `/db` onde fica os arquivos SQLITE e `/download` onde é baixado os dados (csv) publicos do governo.
+> Ao terminar, o programa cria duas pasta, uma `/db` onde fica os arquivos SQLITE e outra `/download` onde é baixado os dados (csv) publicos do governo.
