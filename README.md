@@ -23,4 +23,4 @@ py db_download.py start
 ```bash
 py db_download.py -?
 ```
-> O programa cria duas pasta /db onde fica os arquivos SQLITE e /download onde é baixado os dados (csv) publicos do governo.
+> O programa cria duas pasta, `/db` onde fica os arquivos SQLITE e `/download` onde é baixado os dados (csv) publicos do governo.
