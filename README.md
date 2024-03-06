@@ -4,6 +4,7 @@ Programa em python que baixa uma base de dados (publicas) de CNPJ's do governo e
 
 # Como instalar
 > Instalar o [Python](https://www.python.org/).
+
 > Clonar o repositório com o comando abaixo.
 ```bash
 git clone https://github.com/GennysonJunior/db-cnpj-downloader
@@ -18,7 +19,8 @@ cd /db-cnpj-downloader
 ```bash
 py db_download.py start
 ```
-> Você pode usar o seguinte comando para listar as opções de comando, e usar as opções que desejar.
+> Você pode usar o seguinte comando para listar as opções de comandos, e usar as opções que desejar.
 ```bash
 py db_download.py -?
 ```
+> O programa cria duas pasta /db onde fica os arquivos SQLITE e /download onde é baixado os dados (csv) publicos do governo.
