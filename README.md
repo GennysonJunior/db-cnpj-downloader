@@ -7,7 +7,7 @@ Programa em python que baixa uma base de dados (publicos) de CNPJ's do governo e
 
 > Clone o repositório.
 ```bash
-git clone https://github.com/GennysonJunior/db-cnpj-downloader
+git clone https://github.com/GennysonJunior/db-cnpj-downloader.git
 ```
 > Isntale os requerimentos com o comando a baixo.
 ```bash
