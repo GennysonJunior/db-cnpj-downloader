@@ -421,7 +421,7 @@ COMMAND:
     -?    --help............Comando de ajuda.
                         \n""")
                 case _:
-                    raise Exception(f"Erro: comando ({a}) não existe, deigite: \"py db_download.py -?\"")
+                    raise Exception(f"Erro: comando ({arg}) não existe, deigite: \"py db_download.py -?\"")
         elif arg == "start":
             cnpj.downloader()
             cnpj.genDbRaw()
