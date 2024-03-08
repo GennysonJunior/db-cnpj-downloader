@@ -413,9 +413,7 @@ COMMAND:
     
     -d    --download........Comando para fazer o download dos arquivos do site do governo.
     -b    --raw-data-base...Comando para fazer o banco sqlite caso os arquivos já estejam todos baixados.
-    -u    --update..........Comando para atualizar o arquivo confg_download.json, caso tenha mais arquivos no site do
-                            governo (Atenção: este comando reseta todo o arquivo confg_download.json, perdendo todo o
-                            estado do download anterior; Recomendação: executar este comando sempre que possivel).
+    -u    --update..........Comando para atualizar o arquivo confg_download.json, caso tenha mais arquivos no site do governo (Atenção: este comando reseta todo o arquivo confg_download.json, perdendo todo o estado de download anterior; Recomendação: executar este comando sempre que possivel).
     -r    --remove..........Comando para apagar todos os arquivos da pasta \"download\".
     -n    --new-data-base...Comando para gerar um novo banco de dados sqlite com tabelas mais simples.
     -?    --help............Comando de ajuda.
