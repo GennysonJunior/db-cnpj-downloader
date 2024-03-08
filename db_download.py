@@ -38,7 +38,7 @@ class CNPJ:
         m = findall(r"(\w+).zip", s)
         # resetar "download" e "dataPush"
         for i in m:
-            self.files = {i: {"downloaded": 0, "dataPush": 0}}
+            self.files = {i: {"download": 0, "dataPush": 0}}
         # escrever mudança confg_download.json
         with open("confg_data.json", "w") as res:
             print("[*] reset confg_download.json")
@@ -55,7 +55,7 @@ class CNPJ:
     def remove(self):
         num_data_downloaded = 0
         for file in self.files:
-            if self.files[file]["downloaded"] == 1:
+            if self.files[file]["download"] == 1:
                 num_data_downloaded += 1
         if num_data_downloaded == len(self.files):
             # apaga os arquivos csv antigos
@@ -70,14 +70,14 @@ class CNPJ:
         kbi = False
         for file in self.files:
             try:
-                if self.files[file]["downloaded"] == 0:
+                if self.files[file]["download"] == 0:
                     print(f"\nDownloading {file}:")
                     download("https://dadosabertos.rfb.gov.br/CNPJ/"+file, out="./download")
                     print(f"\n[+] Unpacking {file}")
                     with ZipFile("./download/"+file) as zip:
                         zip.extractall("./download/"+file[0:-4])
                     remove("./download/"+file)
-                    self.files[file]["downloaded"] = 1
+                    self.files[file]["download"] = 1
             except KeyboardInterrupt:
                 kbi = True
                 for f in listdir():
@@ -93,6 +93,13 @@ class CNPJ:
         else:
             with open("confg_download.json", "w") as conf:
                 conf.write(dumps(self.files))
+        
+        sumFD = 0
+        for file in self.files:
+            if self.files[file]["download"] == 1:
+                sumFD += 1
+        if sumFD == len(self.files):
+            print("[*] Download finished.")
 
     def genDbRaw(self):
         def nonum(s):
@@ -100,7 +107,15 @@ class CNPJ:
                 return nonum(s[0:len(s)-1])
             else:
                 return s
-        print("\n\n[*] Creating data base if not exists...")
+        # ver se data_raw.db foi criado
+        dr = False
+        for i in listdir():
+            if "db" == i:
+                for i1 in listdir("./db"):
+                    if "data_raw.db" == i1:
+                        dr = True
+        if not dr:
+            print("\n\n[*] Creating raw data base...")
         # cria o banco de dados (data.db)
         con = connect("./db/data_raw.db")
         # cria as tabela
@@ -152,10 +167,18 @@ class CNPJ:
         con.close()
         with open("confg_download.json", "w") as res:
             res.write(dumps(self.files))
-        print("\n\n[*] Data base created.\n")
+        print("\n\n[*] Raw data base created.\n")
 
     def genNewDb(self):
-        print("\n\n[*] Creating new data base if not exists...")
+        # verifica se data.db foi criado 
+        dr = False
+        for i in listdir():
+            if "db" == i:
+                for i1 in listdir("./db"):
+                    if "data.db" == i1:
+                        dr = True
+        if not dr:
+            print("\n\n[*] Creating new data base...")
         # cria o banco de dados (data.db)
         newcon = connect("./db/data.db")
         con = connect("./db/data_raw.db")
