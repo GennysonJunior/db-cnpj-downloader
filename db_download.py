@@ -4,7 +4,7 @@ from csv import reader
 from json import loads, dumps
 from wget import download
 from sys import argv
-from os import remove, listdir
+from os import remove, listdir, rmdir
 from urllib.request import urlopen
 from re import findall
 from tqdm import tqdm
@@ -38,9 +38,9 @@ class CNPJ:
         m = findall(r"(\w+).zip", s)
         # resetar "download" e "dataPush"
         for i in m:
-            self.files = {i: {"download": 0, "dataPush": 0}}
+            self.files[i] = {"download": 0, "dataPush": 0}
         # escrever mudança confg_download.json
-        with open("confg_data.json", "w") as res:
+        with open("confg_download.json", "w") as res:
             print("[*] reset confg_download.json")
             res.write(dumps(self.files))
         # resetar "it" e "state"
@@ -59,11 +59,13 @@ class CNPJ:
                 num_data_downloaded += 1
         if num_data_downloaded == len(self.files):
             # apaga os arquivos csv antigos
-            for dir in listdir("./download"):
-                for d in listdir("./download/"+dir):
-                    remove("./download/"+dir+"/"+d)
-                print("[-] deleting "+dir)
-                remove("./download/"+dir)
+            if "download" in listdir():
+                for dir in listdir("./download"):
+                    for d in listdir("./download/"+dir):
+                        remove("./download/"+dir+"/"+d)
+                    print("[-] deleting "+dir)
+                    rmdir("./download/"+dir)
+                rmdir("./download")
 
     # baixa os arquivos csv do site governo, extrai, organiza em pastas e exclui o arquivos zip
     def downloader(self):
