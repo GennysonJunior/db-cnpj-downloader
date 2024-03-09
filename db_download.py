@@ -112,7 +112,7 @@ class CNPJ:
                 return s
         def lenCsv(c):
             with open(c, "r", encoding="utf-8", errors="replace") as res:
-                return sum(1 for i in reader(res, delimiter=";"))
+                return sum(1 for _ in res)
         ipd = False
         for i in listdir():
             if i == "db":
