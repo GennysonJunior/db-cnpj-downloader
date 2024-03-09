@@ -4,7 +4,7 @@ from csv import reader
 from json import loads, dumps
 from wget import download
 from sys import argv
-from os import remove, listdir, rmdir
+from os import remove, listdir, rmdir, mkdir
 from urllib.request import urlopen
 from re import findall
 from tqdm import tqdm
@@ -69,32 +69,33 @@ class CNPJ:
 
     # baixa os arquivos csv do site governo, extrai, organiza em pastas e exclui o arquivos zip
     def downloader(self):
-        kbi = False
+        ipd = False
+        for i in listdir():
+            if i == "download":
+                ipd = True
+        if not ipd:
+            mkdir("download")
         for file in self.files:
             try:
                 if self.files[file]["download"] == 0:
-                    print(f"\nDownloading {file}:")
-                    download("https://dadosabertos.rfb.gov.br/CNPJ/"+file, out="./download")
-                    print(f"\n[+] Unpacking {file}")
-                    with ZipFile("./download/"+file) as zip:
-                        zip.extractall("./download/"+file[0:-4])
-                    remove("./download/"+file)
+                    print(f"\nDownloading {file}.zip:")
+                    download("https://dadosabertos.rfb.gov.br/CNPJ/"+file+".zip", out="./download")
+                    print(f"\n[+] Unpacking {file}.zip")
+                    with ZipFile("./download/"+file+".zip") as zip:
+                        zip.extractall("./download/"+file)
+                    remove("./download/"+file+".zip")
                     self.files[file]["download"] = 1
             except KeyboardInterrupt:
-                kbi = True
                 for f in listdir():
                     if file in f:
                         remove(f)
-                break
+                with open("confg_download.json", "w") as conf:
+                    conf.write(dumps(self.files))
+                exit()
             except Exception as e:
-                print(f"Erro no download do arquivo {file}\nMotivo: {e}")
-        if kbi:
-            with open("confg_download.json", "w") as conf:
-                conf.write(dumps(self.files))
-            exit()
-        else:
-            with open("confg_download.json", "w") as conf:
-                conf.write(dumps(self.files))
+                print(f"Erro no download do arquivo {file}.zip\nMotivo: {e}")
+        with open("confg_download.json", "w") as conf:
+            conf.write(dumps(self.files))
         
         sumFD = 0
         for file in self.files:
@@ -109,6 +110,15 @@ class CNPJ:
                 return nonum(s[0:len(s)-1])
             else:
                 return s
+        def lenCsv(c):
+            with open(c, "r", encoding="utf-8", errors="replace") as res:
+                return sum(1 for i in reader(res, delimiter=";"))
+        ipd = False
+        for i in listdir():
+            if i == "db":
+                ipd = True
+        if not ipd:
+            mkdir("db")
         # ver se data_raw.db foi criado
         dr = False
         for i in listdir():
@@ -135,7 +145,8 @@ class CNPJ:
                 for f in listdir("./download/"+fileName):
                     with open("./download/"+fileName+"/"+f, "r", encoding='utf-8', errors='replace') as res:
                         leitor = reader(res, delimiter=';')
-                        for linha in tqdm(leitor):
+                        bar = tqdm(total=lenCsv("./download/"+fileName+"/"+f))
+                        for linha in leitor:
                             try:
                                 sql = f"INSERT OR IGNORE INTO {nonum(fileName)} VALUES ("
                                 for i in range(0, len(linha)):
@@ -164,6 +175,8 @@ class CNPJ:
                                 with open("confg_download.json", "w") as res:
                                     res.write(dumps(self.files))
                                 exit()
+                            bar.update(1)
+                        bar.close()
                     con.commit()
                 self.files[fileName]["dataPush"] = 1
         con.close()
@@ -172,6 +185,12 @@ class CNPJ:
         print("\n\n[*] Raw data base created.\n")
 
     def genNewDb(self):
+        ipd = False
+        for i in listdir():
+            if i == "db":
+                ipd = True
+        if not ipd:
+            mkdir("db")
         # verifica se data.db foi criado 
         dr = False
         for i in listdir():
@@ -210,6 +229,7 @@ class CNPJ:
                     self.newDataType["Simples"]["it"] = cont
                     pbar.update(1)
                     cont += 1
+                pbar.close()
                 newcon.commit()
                 self.newDataType["Simples"]["state"] = 1
             # inserir dados na tabela Socios
@@ -274,6 +294,7 @@ class CNPJ:
                     pbar.update(1)
                     cont += 1
                     self.newDataType["Socios"]["it"] = cont
+                pbar.close()
                 newcon.commit()
                 self.newDataType["Socios"]["state"] = 1
             # inserir dados na tabela Empresas
@@ -319,6 +340,7 @@ class CNPJ:
                     pbar.update(1)
                     cont += 1
                     self.newDataType["Empresas"]["it"] = cont
+                pbar.close()
                 newcon.commit()
                 self.newDataType["Empresas"]["state"] = 1
             # inserir dados na tabela Estabelecimentos
@@ -389,6 +411,7 @@ class CNPJ:
                     pbar.update(1)
                     cont += 1
                     self.newDataType["Estabelecimentos"]["it"] = cont
+                pbar.close()
                 newcon.commit()
                 self.newDataType["Estabelecimentos"]["state"] = 1
         except KeyboardInterrupt:
