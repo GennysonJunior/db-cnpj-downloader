@@ -46,7 +46,7 @@ class CNPJ:
         # resetar "it" e "state"
         for nome in self.newDataType:
             self.newDataType[nome]["it"] = 1
-            self.newDataType[nome]["state"] = 0
+            self.newDataType[nome]["nDataPush"] = 0
         # escrever mudança confg_newData.json
         with open("confg_newData.json", "w") as res:
             print("[*] reset confg_newData.json")
@@ -214,7 +214,7 @@ class CNPJ:
         newcon.commit()
         try:
             # inserir dados na tabela Simples
-            if self.newDataType["Simples"]["state"] == 0:
+            if self.newDataType["Simples"]["nDataPush"] == 0:
                 print("[*] chenge data Simples...")
                 cur.execute("SELECT COUNT(*) FROM Simples;")
                 t = cur.fetchall()[0][0]
@@ -231,9 +231,9 @@ class CNPJ:
                     cont += 1
                 pbar.close()
                 newcon.commit()
-                self.newDataType["Simples"]["state"] = 1
+                self.newDataType["Simples"]["nDataPush"] = 1
             # inserir dados na tabela Socios
-            if self.newDataType["Socios"]["state"] == 0:
+            if self.newDataType["Socios"]["nDataPush"] == 0:
                 print("\n[*] chenge data Socios...")
                 cur.execute("SELECT COUNT(*) FROM Socios;")
                 t = cur.fetchall()[0][0]
@@ -296,9 +296,9 @@ class CNPJ:
                     self.newDataType["Socios"]["it"] = cont
                 pbar.close()
                 newcon.commit()
-                self.newDataType["Socios"]["state"] = 1
+                self.newDataType["Socios"]["nDataPush"] = 1
             # inserir dados na tabela Empresas
-            if self.newDataType["Empresas"]["state"] == 0:
+            if self.newDataType["Empresas"]["nDataPush"] == 0:
                 print("\n[*] chenge data Empresas...")
                 cur.execute("SELECT COUNT(*) FROM Empresas;")
                 t = cur.fetchall()[0][0]
@@ -342,9 +342,9 @@ class CNPJ:
                     self.newDataType["Empresas"]["it"] = cont
                 pbar.close()
                 newcon.commit()
-                self.newDataType["Empresas"]["state"] = 1
+                self.newDataType["Empresas"]["nDataPush"] = 1
             # inserir dados na tabela Estabelecimentos
-            if self.newDataType["Estabelecimentos"]["state"] == 0:
+            if self.newDataType["Estabelecimentos"]["nDataPush"] == 0:
                 print("\n[*] chenge data Estabelecimentos...")
                 cur.execute("SELECT COUNT(*) FROM Estabelecimentos;")
                 t = cur.fetchall()[0][0]
@@ -413,7 +413,7 @@ class CNPJ:
                     self.newDataType["Estabelecimentos"]["it"] = cont
                 pbar.close()
                 newcon.commit()
-                self.newDataType["Estabelecimentos"]["state"] = 1
+                self.newDataType["Estabelecimentos"]["nDataPush"] = 1
         except KeyboardInterrupt:
             newcon.commit()
             newcon.close()
@@ -475,5 +475,28 @@ COMMAND:
         elif arg == "remove":
             cnpj.remove()
             cnpj.updateConfg()
+        elif arg[0:5] == "confg":
+            lentrada = findall(r"((\w+).(\w+)=(\w+))", arg)[0]
+            match lentrada[2]:
+                case "download" | "dataPush":
+                    with open("./confg_download.json", "r") as r:
+                        dr = loads(r.read())
+                        if lentrada[3] == "print":
+                            print(f"\n{lentrada[1]}.{lentrada[2]}={dr[str(lentrada[1])][str(lentrada[2])]}")
+                        else:
+                            dr[str(lentrada[1])][str(lentrada[2])] = int(lentrada[3])
+                            with open("./confg_download.json", "w") as f:
+                                f.write(dumps(dr))
+                case "nDataPush":
+                    with open("./confg_newData.json", "r") as r:
+                        dr = loads(r.read())
+                        if lentrada[3] == "print":
+                            print(f"\n{lentrada[1]}.{lentrada[2]}={dr[str(lentrada[1])][str(lentrada[2])]}")
+                        else:
+                            dr[str(lentrada[1])][str(lentrada[2])] = int(lentrada[3])
+                            with open("./confg_newData.json", "w") as f:
+                                f.write(dumps(dr))
+                case _:
+                    raise Exception(f"Erro: {lentrada[2]} não existe em arquivos de confguração.")
         else:
             raise Exception(f"Erro: comando ({arg}) não existe, deigite: \"py db_download.py -?\"")
