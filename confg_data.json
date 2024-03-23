@@ -6,16 +6,17 @@
     "Paises": ["id TEXT NOT NULL PRIMARY KEY", "descricao TEXT"],
     "Qualificacoes": ["id TEXT NOT NULL PRIMARY KEY", "descricao TEXT"],
     "Simples": [
-        "cnpj_basico TEXT NOT NULL PRIMARY KEY",
+        "cnpj_basico TEXT",
         "opcao_pelo_simples TEXT",
         "data_opcao_pelo_simples TEXT",
         "data_exclusao_do_simples TEXT",
         "opcao_pelo_mei TEXT",
         "data_opcao_pelo_mei TEXT",
-        "data_exclusao_do_mei TEXT"
+        "data_exclusao_do_mei TEXT",
+        "FOREIGN KEY(cnpj_basico) REFERENCES Empresas(cnpj_basico)"
     ],
     "Socios": [
-        "cnpj_basico TEXT NOT NULL PRIMARY KEY",
+        "cnpj_basico TEXT",
         "identificador_socio TEXT",
         "nome_socio TEXT",
         "cnpj_cpf_socio TEXT",
@@ -26,6 +27,7 @@
         "nome_representante TEXT",
         "qualificacao_representante_legal TEXT",
         "faixa_etaria TEXT",
+        "FOREIGN KEY(cnpj_basico) REFERENCES Empresas(cnpj_basico)",
         "FOREIGN KEY(pais) REFERENCES Paises(id)",
         "FOREIGN KEY(qualificacao_socio) REFERENCES Qualificacoes(id)"
     ],
@@ -40,7 +42,7 @@
         "FOREIGN KEY(natureza_juridica) REFERENCES Naturezas(id)"
     ],
     "Estabelecimentos": [
-        "cnpj_basico TEXT NOT NULL PRIMARY KEY",
+        "cnpj_basico TEXT",
         "cnpj_ordem TEXT",
         "cnpj_dv TEXT",
         "matriz_filial TEXT", 
@@ -70,6 +72,7 @@
         "correio_eletronico TEXT",
         "situacao_especial TEXT",
         "data_situacao_especial TEXT",
+        "FOREIGN KEY(cnpj_basico) REFERENCES Empresas(cnpj_basico)",
         "FOREIGN KEY(pais) REFERENCES Paises(id)",
         "FOREIGN KEY(municipio) REFERENCES Municipios(id)",
         "FOREIGN KEY(cnae_fiscal) REFERENCES Cnaes(id)"
