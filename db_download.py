@@ -141,7 +141,7 @@ class CNPJ:
         # insere dados nas tabelas
         for fileName in listdir("./download"):
             if self.files[fileName]["dataPush"] == 0:
-                print("[+] filling data base whith "+fileName+":")
+                print("\n[+] filling data base whith "+fileName+":")
                 for f in listdir("./download/"+fileName):
                     with open("./download/"+fileName+"/"+f, "r", encoding='utf-8', errors='replace') as res:
                         leitor = reader(res, delimiter=';')
@@ -199,7 +199,7 @@ class CNPJ:
                     if "data.db" == i1:
                         dr = True
         if not dr:
-            print("\n\n[*] Creating new data base...")
+            print("\n[*] Creating new data base...")
         # cria o banco de dados (data.db)
         newcon = connect("./db/data.db")
         con = connect("./db/data_raw.db")
