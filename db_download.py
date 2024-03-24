@@ -143,7 +143,7 @@ class CNPJ:
             if self.files[fileName]["dataPush"] == 0:
                 print("\n[+] filling data base whith "+fileName+":")
                 for f in listdir("./download/"+fileName):
-                    with open("./download/"+fileName+"/"+f, "r", encoding='utf-8', errors='replace') as res:
+                    with open("./download/"+fileName+"/"+f, "r", encoding='utf-8', errors='surrogateescape') as res:
                         leitor = reader(res, delimiter=';')
                         bar = tqdm(total=lenCsv("./download/"+fileName+"/"+f))
                         for linha in leitor:
@@ -356,7 +356,7 @@ class CNPJ:
                     ress = cur.fetchall()
                     
                     cnpj_base = ress[0][0]
-                    cnpj_orden = ress[0][1]
+                    cnpj_ordem = ress[0][1]
                     cnpj_dv = ress[0][2]
 
                     cur.execute(f"SELECT descricao FROM Motivos WHERE id == '{ress[0][7]}';")
@@ -390,7 +390,7 @@ class CNPJ:
                     num = 0
                     for i in ress[0]:
                         if num == 1:
-                            l.append(f"{cnpj_base[0:2]+"."+cnpj_base[2:5]+"."+cnpj_base[5:8]}/{cnpj_orden}-{cnpj_dv}")
+                            l.append(f"{cnpj_base[0:2]+"."+cnpj_base[2:5]+"."+cnpj_base[5:8]}/{cnpj_ordem}-{cnpj_dv}")
                         elif num == 2:
                             pass
                         elif num == 3:
