@@ -354,6 +354,10 @@ class CNPJ:
                 while cont <= t:
                     cur.execute(f"SELECT * FROM Estabelecimentos WHERE ROWID == {cont};")
                     ress = cur.fetchall()
+                    
+                    cnpj_base = ress[0][0]
+                    cnpj_orden = ress[0][1]
+                    cnpj_dv = ress[0][2]
 
                     cur.execute(f"SELECT descricao FROM Motivos WHERE id == '{ress[0][7]}';")
                     rm = cur.fetchall()
@@ -385,7 +389,11 @@ class CNPJ:
                     l = []
                     num = 0
                     for i in ress[0]:
-                        if num == 3:
+                        if num == 1:
+                            l.append(f"{cnpj_base[0:2]+"."+cnpj_base[2:5]+"."+cnpj_base[5:8]}/{cnpj_orden}-{cnpj_dv}")
+                        elif num == 2:
+                            pass
+                        elif num == 3:
                             l.append(imf[i])
                         elif num == 5:
                             l.append(sc[i])
@@ -407,7 +415,7 @@ class CNPJ:
                         else:
                             l.append(i)
                         num += 1
-                    newcon.execute(f"INSERT OR IGNORE INTO Estabelecimentos VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", l)
+                    newcon.execute(f"INSERT OR IGNORE INTO Estabelecimentos VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", l)
                     pbar.update(1)
                     cont += 1
                     self.newDataType["Estabelecimentos"]["it"] = cont
