@@ -1,7 +1,7 @@
 # db-cnpj-downloader
-- Programa em python que baixa uma base de dados publicos de CNPJ's do governo e transforma em 2 arquivo SQLITE, um arquivo intermediário `data_raw.db` com a mesma configuração de tabelas do governo (você pode ver essa configuração em `layout data_raw.pdf`) e outro arquivo `data.db` com 4 tabelas (Empresas, Simples, Socios e Estabelecimentos).
-- Este programa guarda os status de download e criação do banco de dados nestes arqivos: `confg_download.json` e `confg_newData.jsom`, para que você possa parar o processo à hora que quiser e continuar em uma outro momento.
-- Ao terminar, o programa cria duas pasta, uma `/db` onde fica os arquivos SQLITE e outra `/download` onde é baixado os dados (csv) publicos do governo.
+- Programa em python que baixa uma base de dados publicos de CNPJ's do governo e transforma em arquivo SQLITE (`data_[ano-mes].db`) com a mesma configuração de tabelas do governo (você pode ver essa configuração em `layout data_raw.pdf`).
+- Este programa guarda os status de download e criação do banco de dados nestes arqivos: `download.json` e `genDB.jsom`, para que você possa parar o processo à hora que quiser e continuar em uma outro momento.
+- Ao terminar, o programa cria dois tipos de pastas, uma `/db` onde fica os arquivos SQLITE e outras `/download_[ano-mes]` onde é baixado os dados (csv) publicos do governo.
 ---
 
 # Como instalar
@@ -18,17 +18,34 @@ pip install -r requirements.txt
 ```
 ---
 # Como usar
-> Rode o seguinte comando para iniciar.
+> Rode o seguinte comando para listar os meses existemtes para download.
 ```bash
-py db_download.py start
+py cnpj.py mes
 ```
-> Se você quiser resetar os status de uso e apagar os arquivos baixados do site do governo, use o comando abaixo.
+-- DOWNLOAD
+> Para baixar todos os meses, digite o seguinte comando.
+```bash
+py cnpj.py download:all
+```
+> Para baixar um mes específico, digite o seguinte comando `py cnpj.py download:ano-mes`.
+```bash
+py cnpj.py download:2024-05
+```
+> Para excluir uma pasta de download, digite o segunte comando `py cnpj.py download:del[ano-mes]`.
+```bash
+py cnpj.py download:del[2024-05]
+```
+> Para excluir todas as pastas de download, digite o seguinte comando.
+```bash
+py cnpj.py download:del[all]
+```
 
-> (este comando **não** remove os arquivos da pasta `/db`)
+-- DATA BESE (SQLITE)
+> Para gerar o banco de dados de um mes somente, digite o seguinte comando `py cnpj.py db:[ano-mes]`.
 ```bash
-py db_download.py remove
+py cnpj.py db:[2024-05]
 ```
-> Você pode usar o seguinte comando para listar as opções de comandos, e usar as opções que desejar.
+> Para gerar os bancos de dados de todos os meses que você baixou, digite o seguinte comando.
 ```bash
-py db_download.py -?
+py cnpj.py db:all
 ```
