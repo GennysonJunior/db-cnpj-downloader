@@ -1,7 +1,7 @@
 # db-cnpj-downloader
-- Programa em python que baixa uma base de dados publicos de CNPJ's do governo e transforma em arquivo SQLITE (`data_[ano-mes].db`) com a mesma configuração de tabelas do governo (você pode ver essa configuração em `layout data_raw.pdf`).
+- Programa em python que baixa uma base de dados publicos de CNPJ's do governo e transforma em arquivo SQLITE (`data_[ano-mês].db`) com a mesma configuração de tabelas do governo (você pode ver essa configuração em `layout data_raw.pdf`).
 - Este programa guarda os status de download e criação do banco de dados nestes arqivos: `download.json` e `genDB.jsom`, para que você possa parar o processo à hora que quiser e continuar em uma outro momento.
-- Ao terminar, o programa cria dois tipos de pastas, uma `/db` onde fica os arquivos SQLITE e outras `/download_[ano-mes]` onde é baixado os dados (csv) publicos do governo.
+- Ao terminar, o programa cria dois tipos de pastas, uma `/db` onde fica os arquivos SQLITE e outras `/download_[ano-mês]` onde é baixado os dados (csv) publicos do governo.
 ---
 
 # Como instalar
@@ -28,11 +28,11 @@ py cnpj.py mes
 ```bash
 py cnpj.py download:all
 ```
-> Para baixar um mês específico, digite o seguinte comando `py cnpj.py download:ano-mes`.
+> Para baixar um mês específico, digite o seguinte comando `py cnpj.py download:ano-mês`.
 ```bash
 py cnpj.py download:2024-05
 ```
-> Para excluir uma pasta de download, digite o segunte comando `py cnpj.py download:del[ano-mes]`.
+> Para excluir uma pasta de download, digite o segunte comando `py cnpj.py download:del[ano-mês]`.
 ```bash
 py cnpj.py download:del[2024-05]
 ```
@@ -42,7 +42,7 @@ py cnpj.py download:del[all]
 ```
 
 -- DATA BESE (SQLITE)
-> Para gerar o banco de dados de um mês somente, digite o seguinte comando `py cnpj.py db:[ano-mes]`.
+> Para gerar o banco de dados de um mês somente, digite o seguinte comando `py cnpj.py db:[ano-mês]`.
 ```bash
 py cnpj.py db:[2024-05]
 ```
