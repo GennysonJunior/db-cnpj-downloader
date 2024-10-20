@@ -28,7 +28,7 @@ py cnpj.py mes
 ```bash
 py cnpj.py download:all
 ```
-> Para baixar um mes específico, digite o seguinte comando `py cnpj.py download:ano-mes`.
+> Para baixar um mês específico, digite o seguinte comando `py cnpj.py download:ano-mes`.
 ```bash
 py cnpj.py download:2024-05
 ```
@@ -42,7 +42,7 @@ py cnpj.py download:del[all]
 ```
 
 -- DATA BESE (SQLITE)
-> Para gerar o banco de dados de um mes somente, digite o seguinte comando `py cnpj.py db:[ano-mes]`.
+> Para gerar o banco de dados de um mês somente, digite o seguinte comando `py cnpj.py db:[ano-mes]`.
 ```bash
 py cnpj.py db:[2024-05]
 ```
